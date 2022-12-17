@@ -14,6 +14,8 @@
 
   <script src="https://unpkg.com/esri-leaflet-geocoder@2.3.2/dist/esri-leaflet-geocoder-debug.js"></script>
 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uswds/3.3.0/css/uswds.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/uswds/3.3.0/js/uswds-init.min.js"></script>
   <!-- this demo plugin bundles only its own code -->
   <script src="./built/bootstrap-geocoder.js"></script>
 
@@ -25,8 +27,9 @@
     }
 
     #map {
-      height: 80%;
-      width: 80%;
+      height: 100%;
+      width: 100%;
+      margin-top: .25rem;
     }
 
     ul {
@@ -41,28 +44,44 @@
     }
 
     li:hover {
-      background: #7FDFFF;
-      border-color: #7FDFFF;
+      color: white;
+      background: #00264c;
+      border-color: #00264c;
     }
 
     .geocoder-control-selected {
-      background: #7FDFFF;
-      border-color: #7FDFFF;
+      color: white;
+      background: #00264c;
+      border-color: #00264c;
     }
 
     ul li {
       list-style-type: none;
     }
 
+    .usa-card__body {
+      width: 91%;
+    }
+
   </style>
 </head>
 
 <body>
-  <input class="form-control" type="text" id="address" autocomplete="off" autofocus />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/uswds/3.3.0/js/uswds.min.js"></script>
+  <div class="usa-accordion">
+    <h4 class="usa-accordion__heading">
+      <button type="button" class="usa-accordion__button" aria-expanded="false" aria-controls="a1">
+        Filters
+      </button>
+    </h4>
+    <div id="a1" class="usa-accordion__content usa-prose">
+      <label class="usa-label" for="address">Search locations, state, zip code</label>
+      <input class="usa-input" type="text" id="address" autocomplete="off" autofocus />
+    </div>
+  </div>
   <div id="map"></div>
-
   <script>
-    var map = L.map('map').setView([45.5165, -122.6764], 3);
+    var map = L.map('map').setView([45.5165, -122.6764], 9);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
@@ -71,6 +90,11 @@
       inputTag: 'address',
       placeholder: 'ex. Boulder, CO'
     }).addTo(map);
+
+    // L.esri.basemapLayer('Streets').addTo(map);
+    // L.esri.Cluster.featureLayer({
+    //   url: 'https://services.arcgis.com/rOo16HdIMeOBI4Mb/arcgis/rest/services/Trimet_Transit_Stops/FeatureServer/0'
+    // }).addTo(map);
 
     search.on('results', function (e) {
       // document.getElementById('map').style.display = 'block';
