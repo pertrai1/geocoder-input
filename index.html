@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Geosearch</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Load Leaflet from CDN-->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet-src.js"></script>
+
+  <script src="https://unpkg.com/esri-leaflet@2.3.3/dist/esri-leaflet-debug.js"></script>
+
+  <script src="https://unpkg.com/esri-leaflet-geocoder@2.3.2/dist/esri-leaflet-geocoder-debug.js"></script>
+
+  <!-- this demo plugin bundles only its own code -->
+  <script src="./built/bootstrap-geocoder.js"></script>
+
+  <style type="text/css">
+    html,
+    body {
+      height: 100%;
+      /* The html and body elements cannot have any padding or margin. */
+    }
+
+    #map {
+      height: 80%;
+      width: 80%;
+    }
+
+    ul {
+      border: 1px solid black;
+      margin: 0;
+      padding: 0;
+    }
+
+    li {
+      padding: 3px 5px;
+      margin: 0;
+    }
+
+    li:hover {
+      background: #7FDFFF;
+      border-color: #7FDFFF;
+    }
+
+    .geocoder-control-selected {
+      background: #7FDFFF;
+      border-color: #7FDFFF;
+    }
+
+    ul li {
+      list-style-type: none;
+    }
+
+  </style>
+</head>
+
+<body>
+  <input class="form-control" type="text" id="address" autocomplete="off" autofocus />
+  <div id="map"></div>
+
+  <script>
+    var map = L.map('map').setView([45.5165, -122.6764], 3);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    var search = L.esri.BootstrapGeocoder.search({
+      inputTag: 'address',
+      placeholder: 'ex. Boulder, CO'
+    }).addTo(map);
+
+    search.on('results', function (e) {
+      // document.getElementById('map').style.display = 'block';
+      // document.getElementById('intro').style.display = 'none';
+
+      // http://leafletjs.com/reference.html#map-invalidatesize
+      map.invalidateSize();
+    });
+  </script>
+
+</body>
+
+</html>
