@@ -59,10 +59,27 @@
       list-style-type: none;
     }
 
+    @media (min-width: 1024px) {
+      .usa-label {
+        margin-top: 0;
+      }
+    }
+
     .usa-card__body {
+      margin-bottom: 0;
       width: 91%;
     }
 
+    .usa-prose .usa-card:last-child {
+      margin-bottom: 0;
+    }
+
+    .accordion-desktop {
+      background-color: inherit;
+      background-image: none !important;
+      cursor: none;
+      pointer-events: none;
+    }
   </style>
 </head>
 
@@ -75,14 +92,61 @@
       </button>
     </h4>
     <div id="a1" class="usa-accordion__content usa-prose">
-      <label class="usa-label" for="address">Search locations, state, zip code</label>
-      <input class="usa-input" type="text" id="address" autocomplete="off" autofocus />
+      <div class="grid-row grid-gap">
+        <div class="desktop:grid-col-3">
+          <label class="usa-label" for="address">Search locations, state, zip code</label>
+          <input class="usa-input" type="text" id="address" autocomplete="off" autofocus />
+        </div>
+        <div class="desktop:grid-col-3">
+          <label class="usa-label" for="options">Site Type</label>
+          <select class="usa-select" name="options" id="options">
+            <option value>- Select -</option>
+            <option value="value1">Option A</option>
+            <option value="value2">Option B</option>
+            <option value="value3">Option C</option>
+          </select>
+        </div>
+        <div class="desktop:grid-col-3">
+          <label class="usa-label" for="options">Date Range</label>
+          <select class="usa-select" name="options" id="options">
+            <option value>- Select -</option>
+            <option value="value1">Option A</option>
+            <option value="value2">Option B</option>
+            <option value="value3">Option C</option>
+          </select>
+        </div>
+        <div class="desktop:grid-col-3">
+          <label class="usa-label" for="options">Keywords</label>
+          <input class="usa-input" type="text" id="keywords" autocomplete="off" />
+        </div>
+      </div>
     </div>
   </div>
   <div id="map"></div>
   <script>
+    let isDesktop = false;
+    if (visualViewport.width > 1024) {
+      isDesktop = true
+      document.querySelector('.usa-accordion__button').classList.add('accordion-desktop')
+      setTimeout(() =>
+        document.querySelector('.usa-accordion__content').removeAttribute('hidden'),
+        1);
+    }
+    visualViewport.addEventListener('resize', ({target}) => {
+      if (target.width > 1024) {
+        isDesktop = true;
+        document.querySelector('.usa-accordion__content').removeAttribute('hidden');
+        document.querySelector('.usa-accordion__button').classList.add('accordion-desktop')
+        document.querySelector('.usa-accordion__button').blur();
+      } else if (target.width < 1024 && isDesktop) {
+        isDesktop = false;
+        document.querySelector('.usa-accordion__button').ariaExpanded = false;
+        document.querySelector('.usa-accordion__content').setAttribute('hidden', '');
+        document.querySelector('.usa-accordion__button').classList.remove('accordion-desktop')
+      }
+    })
     // var map = L.map('map').setView([45.5165, -122.6764], 9);
-    var map = L.map('map').locate({ setView: true, maxZoom: 16 });
+    var map = L.map('map').locate({setView: true, maxZoom: 16});
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
